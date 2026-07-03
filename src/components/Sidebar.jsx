@@ -6,7 +6,7 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentChat, setCurrentChat, closeMobileSidebar }) => {
+const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentChat, setCurrentChat, closeMobileSidebar, historyList }) => {
   const { user, logout } = useAuth();
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentCha
   };
 
   const getHistory = () => {
-    return JSON.parse(localStorage.getItem("yt_rag_history") || "[]");
+    return historyList || [];
   };
 
   const handleLoad = async () => {

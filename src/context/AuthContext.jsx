@@ -76,6 +76,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("yt_access_token");
     localStorage.removeItem("yt_refresh_token");
     localStorage.removeItem("yt_user");
+    localStorage.removeItem("yt_rag_history");
     setUser(null);
   };
 

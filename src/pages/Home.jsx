@@ -1,35 +1,83 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 import Sidebar from "../components/Sidebar";
 import MainContent from "../components/MainContent";
 import SolidBackgroundShapes from "../components/SolidBackgroundShapes";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const Home = () => {
+  const { user } = useAuth();
   const [videoTitle, setVideoTitle] = useState("");
   const [videoReady, setVideoReady] = useState(false);
   const [chat, setChat] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [historyList, setHistoryList] = useState([]);
 
+  // Fetch history from MongoDB backend when user mounts/logs in
   useEffect(() => {
-    if (currentChat?.videoId) {
-      const history = JSON.parse(localStorage.getItem("yt_rag_history") || "[]");
-      const idx = history.findIndex((h) => h.videoId === currentChat.videoId);
-      const dateStr = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
-      if (idx !== -1) {
-        history[idx].chat = chat;
-        history[idx].title = currentChat.title || history[idx].title;
-        history[idx].date = dateStr;
-      } else {
-        history.unshift({
-          videoId: currentChat.videoId,
-          title: currentChat.title || currentChat.videoId,
-          date: dateStr,
-          chat
-        });
-      }
-      localStorage.setItem("yt_rag_history", JSON.stringify(history));
+    if (!user) {
+      setHistoryList([]);
+      return;
     }
-  }, [chat, currentChat]);
+    const fetchHistory = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/history`);
+        setHistoryList(res.data || []);
+      } catch (err) {
+        // Fallback to user-scoped local storage if offline
+        const local = JSON.parse(localStorage.getItem(`yt_rag_history_${user.id}`) || "[]");
+        setHistoryList(local);
+      }
+    };
+    fetchHistory();
+  }, [user]);
+
+  // Sync session history to React state and backend MongoDB
+  useEffect(() => {
+    if (currentChat?.videoId && user) {
+      const dateStr = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+      const entry = {
+        videoId: currentChat.videoId,
+        title: currentChat.title || currentChat.videoId,
+        date: dateStr,
+        chat
+      };
+
+      setHistoryList((prev) => {
+        const idx = prev.findIndex((h) => h.videoId === currentChat.videoId);
+        const copy = [...prev];
+        if (idx !== -1) {
+          copy[idx] = { ...copy[idx], ...entry };
+          return copy;
+        } else {
+          return [entry, ...prev];
+        }
+      });
+
+      // Save user-scoped fallback
+      const storageKey = `yt_rag_history_${user.id}`;
+      try {
+        const currentStorage = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        const idx = currentStorage.findIndex((h) => h.videoId === currentChat.videoId);
+        if (idx !== -1) {
+          currentStorage[idx] = entry;
+        } else {
+          currentStorage.unshift(entry);
+        }
+        localStorage.setItem(storageKey, JSON.stringify(currentStorage));
+      } catch (e) {
+        console.error("Storage error:", e);
+      }
+
+      // Save to MongoDB backend
+      axios.post(`${BASE_URL}/history`, entry).catch((err) => {
+        console.error("Failed to save history to cloud:", err);
+      });
+    }
+  }, [chat, currentChat, user]);
 
   return (
     <div className="flex w-full min-h-screen bg-[#021f18] overflow-hidden relative selection:bg-[#22c55e] selection:text-black font-sans">
@@ -53,6 +101,7 @@ const Home = () => {
           currentChat={currentChat}
           setCurrentChat={setCurrentChat}
           closeMobileSidebar={() => setSidebarOpen(false)}
+          historyList={historyList}
         />
       </div>
 
