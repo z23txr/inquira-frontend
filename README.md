@@ -6,12 +6,12 @@
 
 ##  Key Features
 
-- **  UI/UX:** Built with a curated deep forest green palette (`#021f18`), glowing emerald accents (`#22c55e`),  and dynamic background geometric shapes.
-- ** Real-Time RAG Step Animation:** Visualizes the AI's internal thought process during chat queries (Query Processing ➔ Hybrid Retrieval ➔ Reranking ➔ Fact Verification ➔ Answer Generation).
-- ** Voice Synthesis & Copy:** Integrated text-to-speech (`speechSynthesis`) to read AI responses aloud, along with one-click clipboard copying.
-- ** Fully Responsive Workspace:** Features an adaptive sliding drawer sidebar on mobile devices and a fixed control panel on desktop screens.
-- ** Seamless Authentication Flow:** Complete Login, Registration, and Password Recovery pages with automated JWT token attachment and silent token refreshing via Axios interceptors.
-- ** Cloud & Offline History Sync:** Automatically syncs chat session history with MongoDB Atlas while maintaining a user-scoped local storage backup for offline resilience.
+- **UI/UX:** Built with a curated deep forest green palette (`#021f18`), glowing emerald accents (`#22c55e`),  and dynamic background geometric shapes.
+- **Real-Time RAG Step Animation:** Visualizes the AI's internal thought process during chat queries (Query Processing ➔ Hybrid Retrieval ➔ Reranking ➔ Fact Verification ➔ Answer Generation).
+- **Voice Synthesis & Copy:** Integrated text-to-speech (`speechSynthesis`) to read AI responses aloud, along with one-click clipboard copying.
+- **Fully Responsive Workspace:** Features an adaptive sliding drawer sidebar on mobile devices and a fixed control panel on desktop screens.
+- **Seamless Authentication Flow:** Complete Login, Registration, and Password Recovery pages with automated JWT token attachment and silent token refreshing via Axios interceptors.
+- **Cloud & Offline History Sync:** Automatically syncs chat session history with MongoDB Atlas while maintaining a user-scoped local storage backup for offline resilience.
 
 ---
 
