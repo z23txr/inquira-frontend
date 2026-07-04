@@ -6,7 +6,6 @@ const Footer = () => (
   <footer className="bg-[#01140f] border-t-2 border-[#22c55e]/30 pt-14 pb-10 px-8 relative z-10 text-[#a7f3d0] font-sans">
     <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-[#22c55e]/20">
       
-      {/* Col 1: Brand & Mission */}
       <div className="lg:col-span-4 space-y-3.5">
         <Link to="/" className="flex items-center gap-3">
           <div className="w-10 h-10 bg-[#22c55e] rounded-xl flex items-center justify-center text-black font-black shadow-sm">
@@ -25,7 +24,6 @@ const Footer = () => (
         </div>
       </div>
 
-      {/* Col 2: Core Architecture */}
       <div className="lg:col-span-3 space-y-3">
         <h4 className="text-white font-black text-xs uppercase tracking-wider border-b border-[#22c55e]/20 pb-2">
           Technology
@@ -38,7 +36,6 @@ const Footer = () => (
         </ul>
       </div>
 
-      {/* Col 3: Quick Navigation */}
       <div className="lg:col-span-2 space-y-3">
         <h4 className="text-white font-black text-xs uppercase tracking-wider border-b border-[#22c55e]/20 pb-2">
           Platform
@@ -63,7 +60,6 @@ const Footer = () => (
         </ul>
       </div>
 
-      {/* Col 4: Grounding Guarantee */}
       <div className="lg:col-span-3 space-y-3">
         <h4 className="text-white font-black text-xs uppercase tracking-wider border-b border-[#22c55e]/20 pb-2">
           Accuracy Guarantee
@@ -78,7 +74,6 @@ const Footer = () => (
 
     </div>
 
-    {/* Bottom bar */}
     <div className="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-[#a7f3d0]/70">
       <p>© 2026 Inquira. Built for intelligent video discovery.</p>
       <div className="flex gap-6">

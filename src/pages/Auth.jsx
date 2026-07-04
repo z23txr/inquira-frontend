@@ -5,6 +5,18 @@ import { ArrowLeft, Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react"
 import Youtube from "../components/YoutubeIcon";
 import SolidBackgroundShapes from "../components/SolidBackgroundShapes";
 
+const getErrorMessage = (err, fallback = "Something went wrong") => {
+  const detail = err?.response?.data?.detail;
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) {
+    return detail.map(d => d.msg || JSON.stringify(d)).join(", ");
+  }
+  if (typeof detail === "object" && detail !== null) {
+    return detail.msg || detail.message || JSON.stringify(detail);
+  }
+  return err?.message || fallback;
+};
+
 const Auth = () => {
   const [searchParams] = useSearchParams();
   const [mode, setMode] = useState(searchParams.get("mode") === "register" ? "register" : "login");
@@ -19,12 +31,18 @@ const Auth = () => {
   const [error, setError]               = useState("");
   const [loading, setLoading]           = useState(false);
 
-  // Only redirect if already logged in on page mount
   useEffect(() => {
     if (user && !toast && !loading) {
       navigate("/app");
     }
   }, []);
+
+  useEffect(() => {
+    const paramMode = searchParams.get("mode");
+    if (paramMode === "register" || paramMode === "login" || paramMode === "forgot") {
+      setMode(paramMode);
+    }
+  }, [searchParams]);
 
   const showToastMsg = (msg) => {
     setToast(msg);
@@ -53,7 +71,7 @@ const Auth = () => {
         }, 2200);
       }
     } catch (err) {
-      setError(err.response?.data?.detail || err.message || "Something went wrong");
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -63,13 +81,13 @@ const Auth = () => {
     setMode(newMode);
     setShowPassword(false);
     setError(""); setToast(null);
+    navigate(`/auth?mode=${newMode}`, { replace: true });
   };
 
   return (
     <div className="min-h-screen bg-[#021f18] flex items-center justify-center px-4 py-12 relative overflow-hidden selection:bg-[#22c55e] selection:text-black font-sans">
       <SolidBackgroundShapes />
 
-      {/* ── Upper-Mid Solid Toast Popup ── */}
       {toast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-none px-4 animate-fadeIn">
           <div className="bg-[#22c55e] text-black px-6 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 max-w-md pointer-events-auto border-0">
@@ -79,15 +97,12 @@ const Auth = () => {
         </div>
       )}
 
-      {/* Back to home */}
       <Link to="/" className="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-2 px-4 py-2 bg-[#041a14] border-2 border-[#22c55e]/40 rounded-full text-[#a7f3d0] hover:text-[#f59e0b] hover:border-[#f59e0b] font-bold text-xs sm:text-sm transition-all z-20 shadow-sm">
         <ArrowLeft size={16} /> Back to Home
       </Link>
 
-      {/* Auth card container */}
       <div className="w-full max-w-4xl bg-[#041a14] rounded-3xl border-2 border-[#22c55e]/45 overflow-hidden flex flex-col md:block relative shadow-2xl z-10 min-h-[520px]">
 
-        {/* Mobile Header Tabs */}
         <div className="flex md:hidden border-b-2 border-[#22c55e]/30 bg-[#052e22]">
           <button
             onClick={() => switchMode("login")}
@@ -103,10 +118,8 @@ const Auth = () => {
           </button>
         </div>
 
-        {/* ── Sliding Branding Panel (Hidden on mobile) ── */}
         <div
-          className="hidden md:flex absolute top-0 bottom-0 w-1/2 bg-[#052e22] border-x-2 border-[#22c55e]/35 flex-col items-center justify-center text-center p-10 z-20 transition-all duration-700 ease-in-out"
-          style={{ left: mode === "login" ? "50%" : "0%" }}
+          className={`hidden md:flex absolute top-0 bottom-0 w-1/2 bg-[#052e22] border-x-2 border-[#22c55e]/35 flex-col items-center justify-center text-center p-10 z-20 transition-all duration-700 ease-in-out ${mode === "login" ? "md:left-1/2" : "md:left-0"}`}
         >
           <div className="w-16 h-16 bg-[#22c55e] rounded-2xl flex items-center justify-center text-black font-bold mb-5 shadow-sm">
             <Youtube size={32} />
@@ -127,10 +140,8 @@ const Auth = () => {
           </button>
         </div>
 
-        {/* ── Form Panel ── */}
         <div
-          className="w-full md:absolute md:top-0 md:bottom-0 md:w-1/2 flex flex-col items-center justify-center p-8 md:p-12 transition-all duration-700 ease-in-out z-10 bg-[#041a14] min-h-[440px] md:min-h-full"
-          style={{ left: typeof window !== "undefined" && window.innerWidth >= 768 ? (mode === "login" ? "0%" : "50%") : "0%" }}
+          className={`w-full md:absolute md:top-0 md:bottom-0 md:w-1/2 flex flex-col items-center justify-center p-8 md:p-12 transition-all duration-700 ease-in-out z-10 bg-[#041a14] min-h-[440px] md:min-h-full ${mode === "login" ? "md:left-0" : "md:left-1/2"}`}
         >
           <div className="w-full max-w-sm">
             <span className="text-xs font-mono font-bold text-[#f59e0b] tracking-wider uppercase block mb-1.5">

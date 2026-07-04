@@ -4,16 +4,13 @@ import axios from "axios";
 const AuthContext = createContext(null);
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-// Attach the access token to every request
+
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("yt_access_token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// If a request fails with 401 (expired access token), try to silently
-// refresh it once using the refresh token, then retry the original request.
-// If the refresh itself fails, log the user out.
 axios.interceptors.response.use(
   (response) => response,
   async (error) => {

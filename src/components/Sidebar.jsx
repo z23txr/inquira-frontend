@@ -6,6 +6,14 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
+const getErrorMessage = (err, fallback) => {
+  const detail = err?.response?.data?.detail;
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) return detail.map(d => d.msg || JSON.stringify(d)).join(", ");
+  if (typeof detail === "object" && detail !== null) return detail.msg || detail.message || JSON.stringify(detail);
+  return err?.message || fallback;
+};
+
 const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentChat, setCurrentChat, closeMobileSidebar, historyList }) => {
   const { user, logout } = useAuth();
   const [url, setUrl] = useState("");
@@ -45,7 +53,7 @@ const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentCha
       setCurrentChat({ videoId, title });
       if (closeMobileSidebar) closeMobileSidebar();
     } catch (err) {
-      setError(err.response?.data?.detail || "Failed to load video. Please check the URL or your network connection.");
+      setError(getErrorMessage(err, "Failed to load video. Please check the URL or your network connection."));
     } finally {
       setLoading(false);
     }
@@ -61,7 +69,6 @@ const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentCha
 
   return (
     <div className="w-[280px] sm:w-[300px] min-h-screen bg-[#041a14] border-r-2 border-[#22c55e]/30 flex flex-col justify-between shrink-0 z-10 font-sans shadow-2xl md:shadow-none relative">
-      {/* ── Upper-Mid Solid Signout Toast Popup ── */}
       {signingOut && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] pointer-events-none px-4 animate-fadeIn">
           <div className="bg-[#f59e0b] text-black px-6 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 max-w-md pointer-events-auto border-0">
@@ -71,7 +78,6 @@ const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentCha
         </div>
       )}
       <div>
-        {/* Header Logo & Mobile Close */}
         <div className="px-6 py-5 border-b-2 border-[#22c55e]/20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-[#22c55e] rounded-xl flex items-center justify-center text-black font-bold shadow-sm">
@@ -88,7 +94,6 @@ const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentCha
           )}
         </div>
 
-        {/* User Info & Loader Box */}
         <div className="bg-[#052e22] border-2 border-[#22c55e]/35 rounded-3xl mx-4 mt-5 p-4 space-y-3.5 shadow-md">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-[#f59e0b] rounded-full flex items-center justify-center text-black font-extrabold text-sm shadow-inner">
@@ -122,7 +127,6 @@ const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentCha
           </button>
         </div>
 
-        {/* Current Active Video */}
         {videoTitle && (
           <div className="mx-4 mt-4 p-3.5 bg-[#021f18] border-2 border-[#f59e0b]/50 rounded-2xl shadow-sm">
             <span className="text-[10px] font-mono font-bold text-[#f59e0b] uppercase block mb-1">Active Index</span>
@@ -130,7 +134,6 @@ const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentCha
           </div>
         )}
 
-        {/* History Toggle Button */}
         <button
           onClick={() => setShowHistory(!showHistory)}
           className="flex items-center gap-2 mx-4 mt-5 px-4 py-2 rounded-full border border-[#22c55e]/30 bg-[#021f18] text-[#a7f3d0] hover:text-[#f59e0b] hover:border-[#f59e0b] text-xs font-bold transition-all w-[calc(100%-2rem)] justify-center"
@@ -139,7 +142,6 @@ const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentCha
           <span>Chat History Buffer</span>
         </button>
 
-        {/* History List */}
         {showHistory && (
           <div className="mx-4 mt-2 space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
             {getHistory().length === 0 ? (
@@ -160,7 +162,6 @@ const Sidebar = ({ videoTitle, setVideoTitle, setVideoReady, setChat, currentCha
         )}
       </div>
 
-      {/* Footer Controls */}
       <div className="p-4 border-t-2 border-[#22c55e]/20 space-y-2.5">
         <button
           onClick={() => { setChat([]); setVideoTitle(""); setVideoReady(false); setUrl(""); setCurrentChat(null); if (closeMobileSidebar) closeMobileSidebar(); }}

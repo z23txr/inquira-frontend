@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* Hide scrollbars globally across all browsers while allowing seamless scrolling */
 * {
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;

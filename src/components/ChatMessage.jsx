@@ -18,10 +18,10 @@ const ChatMessage = ({ query, answer }) => {
   }, [answer]);
 
   const thinkingSteps = [
-    "Resolving follow-up references & rewriting query...",
-    "Hybrid Similarity Search (Pinecone Vector + BM25 Keywords)...",
-    "Smart Reranking & Compressing (Retrieved 15 -> Top 5 exact chunks)...",
-    "Verifying video timestamps & synthesizing grounded response..."
+    "rewriting query",
+    "Hybrid Similarity Search ",
+    "Smart Reranking & Compressing ",
+    "Verifying video grounded response"
   ];
 
   const handleCopy = () => {

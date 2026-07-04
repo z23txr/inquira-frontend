@@ -16,7 +16,6 @@ const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [historyList, setHistoryList] = useState([]);
 
-  // Fetch history from MongoDB backend when user mounts/logs in
   useEffect(() => {
     if (!user) {
       setHistoryList([]);
@@ -27,7 +26,6 @@ const Home = () => {
         const res = await axios.get(`${BASE_URL}/history`);
         setHistoryList(res.data || []);
       } catch (err) {
-        // Fallback to user-scoped local storage if offline
         const local = JSON.parse(localStorage.getItem(`yt_rag_history_${user.id}`) || "[]");
         setHistoryList(local);
       }
@@ -35,7 +33,6 @@ const Home = () => {
     fetchHistory();
   }, [user]);
 
-  // Sync session history to React state and backend MongoDB
   useEffect(() => {
     if (currentChat?.videoId && user) {
       const dateStr = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
@@ -57,7 +54,6 @@ const Home = () => {
         }
       });
 
-      // Save user-scoped fallback
       const storageKey = `yt_rag_history_${user.id}`;
       try {
         const currentStorage = JSON.parse(localStorage.getItem(storageKey) || "[]");
@@ -72,7 +68,6 @@ const Home = () => {
         console.error("Storage error:", e);
       }
 
-      // Save to MongoDB backend
       axios.post(`${BASE_URL}/history`, entry).catch((err) => {
         console.error("Failed to save history to cloud:", err);
       });
@@ -83,7 +78,6 @@ const Home = () => {
     <div className="flex w-full min-h-screen bg-[#021f18] overflow-hidden relative selection:bg-[#22c55e] selection:text-black font-sans">
       <SolidBackgroundShapes />
       
-      {/* Mobile Backdrop Overlay when drawer is open */}
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
@@ -91,7 +85,6 @@ const Home = () => {
         />
       )}
 
-      {/* Sidebar (Responsive Drawer on Mobile, Fixed Panel on Desktop) */}
       <div className={`fixed md:relative inset-y-0 left-0 z-50 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 transition-transform duration-300 ease-in-out shrink-0`}>
         <Sidebar
           videoTitle={videoTitle}

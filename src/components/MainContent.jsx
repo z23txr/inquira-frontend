@@ -31,9 +31,14 @@ const MainContent = ({ videoReady, chat, setChat, currentChat, setSidebarOpen })
         return updated;
       });
     } catch (err) {
+      const detail = err.response?.data?.detail;
+      const errorMsg = typeof detail === "string" ? detail
+        : Array.isArray(detail) ? detail.map(d => d.msg || JSON.stringify(d)).join(", ")
+        : typeof detail === "object" && detail !== null ? (detail.msg || detail.message || JSON.stringify(detail))
+        : err.message || "Something went wrong while processing your question. Please try again.";
       setChat((prev) => {
         const updated = [...prev];
-        updated[updated.length - 1].answer = "Error: " + (err.response?.data?.detail || "Something went wrong while processing your question. Please try again.");
+        updated[updated.length - 1].answer = "Error: " + errorMsg;
         return updated;
       });
     }
@@ -41,10 +46,8 @@ const MainContent = ({ videoReady, chat, setChat, currentChat, setSidebarOpen })
 
   return (
     <div className="flex-1 flex flex-col h-screen bg-[#021f18] px-4 sm:px-8 py-4 sm:py-6 z-10 relative font-sans w-full min-w-0">
-      {/* Top Banner */}
       <div className="flex items-center justify-between border-b-2 border-[#22c55e]/20 pb-3 sm:pb-4 mb-4 sm:mb-6 gap-2">
         <div className="flex items-center gap-3">
-          {/* Mobile Sidebar Toggle */}
           {setSidebarOpen && (
             <button
               onClick={() => setSidebarOpen(true)}
@@ -69,7 +72,6 @@ const MainContent = ({ videoReady, chat, setChat, currentChat, setSidebarOpen })
         )}
       </div>
 
-      {/* Empty State */}
       {chat.length === 0 && (
         <div className="flex-1 flex flex-col items-center justify-center text-center max-w-lg mx-auto px-2">
           <h1 className="text-2xl sm:text-4xl font-black text-white mb-2 sm:mb-3 uppercase tracking-tight">
@@ -83,7 +85,6 @@ const MainContent = ({ videoReady, chat, setChat, currentChat, setSidebarOpen })
         </div>
       )}
 
-      {/* Chat Messages */}
       {chat.length > 0 && (
         <div className="flex-1 overflow-y-auto space-y-4 sm:space-y-6 custom-scrollbar pr-1 sm:pr-2 mb-4 sm:mb-6">
           {chat.map((item, index) => (
@@ -93,7 +94,6 @@ const MainContent = ({ videoReady, chat, setChat, currentChat, setSidebarOpen })
         </div>
       )}
 
-      {/* Input Box */}
       <form
         onSubmit={handleSubmit}
         className="flex items-center bg-[#041a14] border-2 border-[#22c55e]/50 rounded-full p-1.5 sm:p-2 focus-within:border-[#f59e0b] transition-colors shadow-2xl gap-1"

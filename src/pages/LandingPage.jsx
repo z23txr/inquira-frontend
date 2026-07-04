@@ -49,11 +49,9 @@ const LandingPage = () => (
     
     <Navbar />
 
-    {/* Balanced Left/Right Hero Section */}
     <section className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 pt-28 md:pt-36 pb-12 w-full">
       <div className="grid lg:grid-cols-12 gap-8 lg:gap-14 items-center">
         
-        {/* Left Column: Full-Width Typography */}
         <div className="lg:col-span-7 text-left space-y-6">
           <RevealOnScroll delay={50}>
             <div className="flex flex-wrap gap-2.5 mb-2">
@@ -83,7 +81,6 @@ const LandingPage = () => (
           </RevealOnScroll>
         </div>
 
-        {/* Right Column: Compact Horizontal Highlight Cards */}
         <div className="lg:col-span-5 w-full mt-6 lg:mt-0">
           <RevealOnScroll delay={200}>
             <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-4">
@@ -125,7 +122,6 @@ const LandingPage = () => (
       </div>
     </section>
 
-    {/* Real Architecture Features Grid */}
     <section className="relative z-10 pt-4 pb-16 px-6 sm:px-8 max-w-7xl mx-auto w-full">
       <RevealOnScroll delay={100}>
         <div className="mb-8 border-b border-[#22c55e]/20 pb-4">
@@ -142,7 +138,6 @@ const LandingPage = () => (
       </div>
     </section>
 
-    {/* ── Call to Action Banner ── */}
     <section className="relative z-10 pt-4 pb-20 px-6 sm:px-8 max-w-7xl mx-auto w-full">
       <RevealOnScroll delay={150}>
         <div className="bg-[#041a14] border-2 border-[#22c55e] rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden shadow-2xl">
