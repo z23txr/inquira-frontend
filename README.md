@@ -1,17 +1,110 @@
-# React + Vite
+#  Inquira Frontend  AI Video RAG Workspace
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**Inquira Frontend** is a modern, responsive, and visually stunning web interface built for the Inquira Video RAG Engine. It allows users to paste YouTube links, index video content in real time, and engage in interactive, timestamp-verified AI chats.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+##  Key Features
 
-## React Compiler
+- **  UI/UX:** Built with a curated deep forest green palette (`#021f18`), glowing emerald accents (`#22c55e`),  and dynamic background geometric shapes.
+- ** Real-Time RAG Step Animation:** Visualizes the AI's internal thought process during chat queries (Query Processing ➔ Hybrid Retrieval ➔ Reranking ➔ Fact Verification ➔ Answer Generation).
+- ** Voice Synthesis & Copy:** Integrated text-to-speech (`speechSynthesis`) to read AI responses aloud, along with one-click clipboard copying.
+- ** Fully Responsive Workspace:** Features an adaptive sliding drawer sidebar on mobile devices and a fixed control panel on desktop screens.
+- ** Seamless Authentication Flow:** Complete Login, Registration, and Password Recovery pages with automated JWT token attachment and silent token refreshing via Axios interceptors.
+- ** Cloud & Offline History Sync:** Automatically syncs chat session history with MongoDB Atlas while maintaining a user-scoped local storage backup for offline resilience.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
+##  Technology Stack
 
-## Expanding the Oxlint configuration
+- **Core Framework:** React 19, Vite
+- **Styling:** Tailwind CSS, Vanilla CSS (Custom Scrollbars & Animations)
+- **HTTP Client:** Axios (with request/response interceptors for JWT auth)
+- **Icons & Graphics:** Lucide React Icons, Custom SVG Branding
+- **Routing:** React Router DOM
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+---
+
+##  Prerequisites & Installation
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/z23txr/inquira-frontend.git
+   cd inquira-frontend
+   ```
+
+2. **Install Node Dependencies:**
+   ```bash
+   npm install
+   ```
+
+---
+
+##  Environment Configuration (`.env`)
+
+Create a `.env` file in the root directory to configure the backend API endpoint:
+
+```env
+# Backend FastAPI Server URL
+VITE_API_URL="http://localhost:8000"
+```
+
+---
+
+##  Running Locally
+
+Start the Vite development server:
+
+```bash
+npm run dev
+```
+
+The application will be accessible at:
+ **http://localhost:5173**
+
+---
+
+## 📦 Building for Production
+
+To create an optimized production build:
+
+```bash
+npm run build
+```
+
+To preview the production build locally:
+
+```bash
+npm run preview
+```
+
+---
+
+##  Project Structure
+
+```text
+src/
+ ┣ assets/          # Static assets and logos
+ ┣ components/      # Reusable UI components
+ ┃ ┣ ChatMessage.jsx        # Chat bubbles, RAG animation & TTS
+ ┃ ┣ LandingCards.jsx       # Feature cards & badges for landing page
+ ┃ ┣ MainContent.jsx        # Chat workspace & input area
+ ┃ ┣ Navbar.jsx             # Top navigation bar
+ ┃ ┣ Sidebar.jsx            # Video indexer & history drawer
+ ┃ ┣ SolidBackgroundShapes  # Geometric background decoration
+ ┃ ┗ footer.jsx             # Comprehensive landing footer
+ ┣ context/         # Global React Contexts
+ ┃ ┗ AuthContext.jsx        # Global authentication & JWT session state
+ ┣ pages/           # Application route pages
+ ┃ ┣ Auth.jsx               # Login, Register & Forgot Password views
+ ┃ ┣ Home.jsx               # Main RAG workspace page
+ ┃ ┗ LandingPage.jsx        # Hero landing & marketing page
+ ┣ index.css        # Tailwind directives & global styling rules
+ ┗ main.jsx         # React application entry point
+```
+
+---
+
+##  Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/z23txr/inquira-frontend/issues).
